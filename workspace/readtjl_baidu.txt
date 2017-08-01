@@ -1,0 +1,72 @@
+﻿from selenium import webdriver
+driver = webdriver.PhantomJS()
+driver.set_window_size(1024, 768)
+driver.get('http://pan.baidu.com')
+
+# 伪装UA
+from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+dc = DesiredCapabilities.PHANTOMJS.copy()
+dc["phantomjs.page.settings.userAgent"] = "Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_0 like Mac OS X; en-us) AppleWebKit/528.18 (KHTML, like Gecko) Version/4.0 Mobile/7A341 Safari/528.16"
+driver = webdriver.PhantomJS(desired_capabilities=dc)
+driver.get('http://pan.baidu.com')
+driver.execute_script("return navigator.userAgent")
+open('/home/tanjl/tmp/o.txt', 'w').write(driver.page_source.encode('utf8'))
+import time; time.sleep(2)
+driver.save_screenshot('/home/tanjl/tmp/example.png')
+
+# 保存cookie, 1.9.8可以保存，2.1.1不能保存
+driver = webdriver.PhantomJS(service_args=['--cookies-file=test.cookies'])
+
+# 登录
+for i,e in enumerate(driver.find_elements_by_xpath("//a")):
+    print "%d...%s" % (i, e.text)
+driver.find_elements_by_xpath("//a")[21].click()
+
+# 登录
+import os
+driver.find_element_by_xpath("//*[@id='TANGRAM__PSP_4__userName']").clear()
+driver.find_element_by_xpath("//*[@id='TANGRAM__PSP_4__userName']").send_keys('june.tan@163.com')
+driver.find_element_by_xpath("//*[@id='TANGRAM__PSP_4__password']").send_keys(os.getenv('MYPSWD'))
+driver.find_element_by_xpath("//*[@id='TANGRAM__PSP_4__submit']").click()
+import time;time.sleep(3)
+driver.save_screenshot('/home/tanjl/tmp/example.png')
+
+# 点击文件
+driver.find_element_by_xpath("//*[@title='_Books']").click()
+e = driver.find_element_by_xpath("//*[@title='Thinking in Java 4th Edition.pdf']")
+actionChains.move_to_element(e).context_click(e).perform()
+
+
+
+
+
+
+from selenium.webdriver.common.keys import Keys
+driver.send_keys(Keys.CONTROL + 'T')
+
+
+
+
+# 保存cookie
+from selenium import webdriver
+driver2 = webdriver.PhantomJS()
+driver.get('http://pan.baidu.com/')
+cookies = driver.get_cookies()
+driver.delete_all_cookies()
+for cookie in cookies :
+    driver.add_cookie({k: cookie[k] for k in ('name', 'value', 'domain', 'path')})
+for cookie in driver.get_cookies():
+    driver2.add_cookie({k: cookie[k] for k in ('name', 'value', 'domain', 'path')})
+
+
+
+# 文件列表
+for i,t in enumerate(zip(driver.find_elements_by_xpath('//*[@class="list-item"]'), driver.find_elements_by_xpath('//*[@class="list-item"]/i'))):
+    print "NO. %d" % i
+    print t[0].text
+    print t[1].get_attribute("class")
+
+driver.find_elements_by_xpath('//*[@class="list-item"]')[5]
+driver.find_elements_by_xpath('//*[@class="list-item"]/i')[5].get_attribute("class") #: 判断文件夹还是文件
+driver.find_element_by_xpath('//a[@class="btn blue-btn footer-download-btn"]').get_attribute('href')
